@@ -10,12 +10,17 @@
 
     <h1>Learn ABCD in 3D Style</h1>
 
-    <div class="container">
-        <div class="letter">A</div>
-        <div class="letter">B</div>
-        <div class="letter">C</div>
-        <div class="letter">D</div>
-    </div>
+    <div class="container" id="letter-container"></div>
 
+    <script>
+        const container = document.getElementById('letter-container');
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        letters.split('').forEach(letter => {
+            const div = document.createElement('div');
+            div.className = 'letter';
+            div.innerText = letter;
+            container.appendChild(div);
+        });
+    </script>
 </body>
 </html>
