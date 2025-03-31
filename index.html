@@ -3,24 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D ABCD for Kids</title>
-    <link rel="stylesheet" href="style.css">
+    <title>3D ABCs for Kids!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f9ff;
+            font-family: 'Comic Sans MS', cursive;
+            perspective: 1000px;
+        }
+
+        .title {
+            font-size: 4rem;
+            color: #ff6b6b;
+            text-shadow: 3px 3px 0 #ffe66d;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .letters-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1000px;
+        }
+
+        .letter-box {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .letter {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            font-weight: bold;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .front {
+            background-color: #ff6b6b;
+            color: white;
+            transform: translateZ(30px);
+        }
+
+        .back {
+            background-color: #4ecdc4;
+            color: white;
+            transform: rotateY(180deg) translateZ(30px);
+        }
+
+        .top {
+            background-color: #ffe66d;
+            height: 30px;
+            transform: rotateX(-90deg) translateZ(60px);
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        /* Color variations */
+        .letter-box:nth-child(odd) .front { background-color: #2196F3; }
+        .letter-box:nth-child(3n) .front { background-color: #4CAF50; }
+        .letter-box:nth-child(4n) .front { background-color: #FFC107; }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .letter-box {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 3rem;
+                margin: 0.5rem 0;
+            }
+
+            .letters-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .letter-box {
+                width: 120px;
+                height: 120px;
+            }
+
+            .letter {
+                font-size: 4rem;
+            }
+
+            .top {
+                font-size: 1rem;
+                transform: rotateX(-90deg) translateZ(50px);
+            }
+        }
+    </style>
 </head>
 <body>
-
-    <h1>Learn ABCD in 3D Style</h1>
-
-    <div class="container" id="letter-container"></div>
-
-    <script>
-        const container = document.getElementById('letter-container');
-        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        letters.split('').forEach(letter => {
-            const div = document.createElement('div');
-            div.className = 'letter';
-            div.innerText = letter;
-            container.appendChild(div);
-        });
-    </script>
-</body>
-</html>
+    <h1 class="title">ABCs Fun!</h1>
+    
+    <div class="letters-container">
+        <!-- Generate A-Z letters with sample words -->
+        <div class="letter-box"><div class="letter front">A</div><div class="letter back">A</div><div class="letter top">Apple</div></div>
+        <div class="letter-box"><div class="letter front">B</div><div class="letter back">B</div><div class="letter top">Ball</div></div>
+        <div class="letter-box"><div class="letter front">C</div><div class="letter back">C</div><div class="letter top">Cat</div></div>
+        <div class="letter-box"><div class="letter front">D</div><div class="letter back">D</div><div class="letter top">Dog</div></div>
+        <div class="letter-box"><div class="letter front">E</div><div class="letter back">E</div><div class="letter top">Egg</div></div>
+        <div class="letter-box"><div class="letter front">F</div><div class="letter back">F</div><div class="letter top">Fish</div></div>
+        <div class="letter-box"><div class="letter front">G</div><div class="letter back">G</div><div class="letter top">Goat</div></div>
+        <div class="letter-box"><div class="letter front">H</div><div class="letter back">H</div><div class="letter top">Hat</div></div>
+        <div class="letter-box"><div class="letter front">I</div><div class="letter back">I</div><div class="letter top">Ice</div></div>
+        <div class="letter-box"><div class="letter front">J</div><div class="letter back">J</div><div class="letter top">Jug</div></div>
+        <div class="letter-box"><div class="letter front">K</div><div class="letter back">K</div><div class="letter top">Kite</div></div>
+        <div class="letter-box"><div class="letter front">L</div><div class="letter back">L</div><div class="letter top">Lion</div></div>
+        <div class="letter-box"><div class="letter front">M</div><div class="letter back">M</div><div class="letter top">Moon</div></div>
+        <div class="letter-box"><div class="letter front">N</div><div class="letter back">N</div><div class="letter top">Nest</div></div>
+        <div class="letter-box"><div class="letter front">O</div><div class="letter back">O</div><div class="letter top">Owl</div></div>
+        <div class="letter-box"><div class="letter front">P</div><div class="letter back">P</div><div class="letter top">Pig</div></div>
+        <div class="letter-box"><div class="letter front">Q</div><div class="letter back">Q</div><div class="letter top">Queen</div></div>
+        <div class="letter-box"><div class="letter front">R</div><div class="letter back">R</div><div class="letter top">Rain</div></div>
+        <div class="letter-box"><div class="letter front">S</div><div class="letter back">S</div><div class="letter top">Sun</div></div>
+        <div class="letter-box"><div class="letter front">T</div><div class="letter back">T</div><div class="letter top">Tree</div></div>
+        <div class="letter-box"><div class="letter front">U</div><div class="letter back">U</div><div class="letter top">Umbrella</div></div>
+        <div class="letter-box"><div class="letter front">V</div><div class="letter back">V</div><div class="letter top">Van</div></div>
+        <div class="letter-box"><div class="letter front">W</div><div class="letter back">W</div><div class="letter top">Web</div></div>
+        <div class="letter-box"><div class="letter front">X</div><div class="letter back">X</div><div class="letter top">Xylophone</div></div>
+        <div class="letter-box"><div class="letter front">Y</div><div class="letter back">Y</div><div class="letter top">Yak</div></div>
+        <div class="letter-box"><div class="letter front">Z</div><div class="letter back">
