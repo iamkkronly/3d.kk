@@ -3,8 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D ABCs for Kids!</title>
+    <title>Magic Mirror ABCs</title>
     <style>
+        :root {
+            --color-primary: #FF5252;
+            --color-secondary: #2196F3;
+            --color-accent: #4CAF50;
+            --color-highlight: #FFC107;
+        }
+        
         body {
             margin: 0;
             padding: 20px;
@@ -12,35 +19,40 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: #f0f9ff;
-            font-family: 'Comic Sans MS', cursive;
-            perspective: 1000px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            perspective: 1200px;
+            overflow-x: hidden;
         }
 
         .title {
-            font-size: 4rem;
+            font-size: 3.5rem;
             color: #ff6b6b;
-            text-shadow: 3px 3px 0 #ffe66d;
-            margin: 1rem 0;
+            text-shadow: 3px 3px 0 #ffe66d, 6px 6px 0 rgba(0,0,0,0.1);
+            margin: 1rem 0 2rem;
             text-align: center;
         }
 
         .letters-container {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            max-width: 1000px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1.5rem;
+            width: 90%;
+            max-width: 1200px;
+            justify-items: center;
         }
 
         .letter-box {
-            width: 150px;
-            height: 150px;
+            width: 160px;
+            height: 160px;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.8s;
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             cursor: pointer;
-            flex-shrink: 0;
+        }
+
+        .letter-box:hover {
+            transform: rotateY(15deg) rotateX(10deg) scale(1.05);
         }
 
         .letter {
@@ -50,104 +62,295 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 5rem;
+            font-size: 5.5rem;
             font-weight: bold;
             backface-visibility: hidden;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            color: white;
         }
 
         .front {
-            background-color: #ff6b6b;
-            color: white;
-            transform: translateZ(30px);
+            background: var(--color-primary);
+            transform: translateZ(40px);
         }
 
         .back {
-            background-color: #4ecdc4;
-            color: white;
-            transform: rotateY(180deg) translateZ(30px);
+            background: var(--color-secondary);
+            transform: rotateY(180deg) translateZ(40px);
         }
 
         .top {
-            background-color: #ffe66d;
-            height: 30px;
-            transform: rotateX(-90deg) translateZ(60px);
-            font-size: 1.2rem;
+            background: var(--color-highlight);
+            height: 40px;
+            transform: rotateX(90deg) translateY(-20px) translateZ(100px);
+            font-size: 1.3rem;
             color: #333;
+            align-items: flex-start;
+            padding-top: 5px;
+        }
+
+        /* Mirror effect */
+        .mirror {
+            position: absolute;
+            width: 100%;
+            height: 40px;
+            bottom: -45px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
+            border-radius: 50%;
+            transform: rotateX(90deg) scaleY(0.5) translateZ(-60px);
+            filter: blur(5px);
+            opacity: 0.7;
         }
 
         /* Color variations */
-        .letter-box:nth-child(odd) .front { background-color: #2196F3; }
-        .letter-box:nth-child(3n) .front { background-color: #4CAF50; }
-        .letter-box:nth-child(4n) .front { background-color: #FFC107; }
+        .letter-box:nth-child(4n+1) .front { background: #FF5252; }
+        .letter-box:nth-child(4n+2) .front { background: #2196F3; }
+        .letter-box:nth-child(4n+3) .front { background: #4CAF50; }
+        .letter-box:nth-child(4n+4) .front { background: #FFC107; }
+
+        /* Matching backs */
+        .letter-box:nth-child(4n+1) .back { background: #FF7043; }
+        .letter-box:nth-child(4n+2) .back { background: #42A5F5; }
+        .letter-box:nth-child(4n+3) .back { background: #66BB6A; }
+        .letter-box:nth-child(4n+4) .back { background: #FFD54F; }
 
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
 
         .letter-box {
-            animation: float 3s ease-in-out infinite;
+            animation: float 4s ease-in-out infinite;
+            animation-delay: calc(var(--i) * 0.1s);
         }
 
+        /* Mobile styles */
         @media (max-width: 768px) {
             .title {
-                font-size: 3rem;
-                margin: 0.5rem 0;
+                font-size: 2.5rem;
+                margin: 0.5rem 0 1.5rem;
             }
 
             .letters-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 0.5rem;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+                width: 95%;
             }
 
             .letter-box {
-                width: 120px;
-                height: 120px;
+                width: 100px;
+                height: 100px;
             }
 
             .letter {
-                font-size: 4rem;
+                font-size: 3.5rem;
+                border-radius: 15px;
             }
 
             .top {
+                height: 30px;
                 font-size: 1rem;
-                transform: rotateX(-90deg) translateZ(50px);
+                transform: rotateX(90deg) translateY(-15px) translateZ(65px);
+            }
+
+            .mirror {
+                height: 20px;
+                bottom: -25px;
+                transform: rotateX(90deg) scaleY(0.5) translateZ(-40px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .letters-container {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
 </head>
 <body>
-    <h1 class="title">ABCs Fun!</h1>
+    <h1 class="title">Magic Mirror ABCs</h1>
     
     <div class="letters-container">
-        <!-- Generate A-Z letters with sample words -->
-        <div class="letter-box"><div class="letter front">A</div><div class="letter back">A</div><div class="letter top">Apple</div></div>
-        <div class="letter-box"><div class="letter front">B</div><div class="letter back">B</div><div class="letter top">Ball</div></div>
-        <div class="letter-box"><div class="letter front">C</div><div class="letter back">C</div><div class="letter top">Cat</div></div>
-        <div class="letter-box"><div class="letter front">D</div><div class="letter back">D</div><div class="letter top">Dog</div></div>
-        <div class="letter-box"><div class="letter front">E</div><div class="letter back">E</div><div class="letter top">Egg</div></div>
-        <div class="letter-box"><div class="letter front">F</div><div class="letter back">F</div><div class="letter top">Fish</div></div>
-        <div class="letter-box"><div class="letter front">G</div><div class="letter back">G</div><div class="letter top">Goat</div></div>
-        <div class="letter-box"><div class="letter front">H</div><div class="letter back">H</div><div class="letter top">Hat</div></div>
-        <div class="letter-box"><div class="letter front">I</div><div class="letter back">I</div><div class="letter top">Ice</div></div>
-        <div class="letter-box"><div class="letter front">J</div><div class="letter back">J</div><div class="letter top">Jug</div></div>
-        <div class="letter-box"><div class="letter front">K</div><div class="letter back">K</div><div class="letter top">Kite</div></div>
-        <div class="letter-box"><div class="letter front">L</div><div class="letter back">L</div><div class="letter top">Lion</div></div>
-        <div class="letter-box"><div class="letter front">M</div><div class="letter back">M</div><div class="letter top">Moon</div></div>
-        <div class="letter-box"><div class="letter front">N</div><div class="letter back">N</div><div class="letter top">Nest</div></div>
-        <div class="letter-box"><div class="letter front">O</div><div class="letter back">O</div><div class="letter top">Owl</div></div>
-        <div class="letter-box"><div class="letter front">P</div><div class="letter back">P</div><div class="letter top">Pig</div></div>
-        <div class="letter-box"><div class="letter front">Q</div><div class="letter back">Q</div><div class="letter top">Queen</div></div>
-        <div class="letter-box"><div class="letter front">R</div><div class="letter back">R</div><div class="letter top">Rain</div></div>
-        <div class="letter-box"><div class="letter front">S</div><div class="letter back">S</div><div class="letter top">Sun</div></div>
-        <div class="letter-box"><div class="letter front">T</div><div class="letter back">T</div><div class="letter top">Tree</div></div>
-        <div class="letter-box"><div class="letter front">U</div><div class="letter back">U</div><div class="letter top">Umbrella</div></div>
-        <div class="letter-box"><div class="letter front">V</div><div class="letter back">V</div><div class="letter top">Van</div></div>
-        <div class="letter-box"><div class="letter front">W</div><div class="letter back">W</div><div class="letter top">Web</div></div>
-        <div class="letter-box"><div class="letter front">X</div><div class="letter back">X</div><div class="letter top">Xylophone</div></div>
-        <div class="letter-box"><div class="letter front">Y</div><div class="letter back">Y</div><div class="letter top">Yak</div></div>
-        <div class="letter-box"><div class="letter front">Z</div><div class="letter back">
+        <!-- Generated A-Z letters with mirror effects -->
+        <div class="letter-box" style="--i:0">
+            <div class="letter front">A</div>
+            <div class="letter back">A</div>
+            <div class="letter top">Apple</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:1">
+            <div class="letter front">B</div>
+            <div class="letter back">B</div>
+            <div class="letter top">Ball</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:2">
+            <div class="letter front">C</div>
+            <div class="letter back">C</div>
+            <div class="letter top">Cat</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:3">
+            <div class="letter front">D</div>
+            <div class="letter back">D</div>
+            <div class="letter top">Dog</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:4">
+            <div class="letter front">E</div>
+            <div class="letter back">E</div>
+            <div class="letter top">Egg</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:5">
+            <div class="letter front">F</div>
+            <div class="letter back">F</div>
+            <div class="letter top">Fish</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:6">
+            <div class="letter front">G</div>
+            <div class="letter back">G</div>
+            <div class="letter top">Goat</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:7">
+            <div class="letter front">H</div>
+            <div class="letter back">H</div>
+            <div class="letter top">Hat</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:8">
+            <div class="letter front">I</div>
+            <div class="letter back">I</div>
+            <div class="letter top">Ice</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:9">
+            <div class="letter front">J</div>
+            <div class="letter back">J</div>
+            <div class="letter top">Jug</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:10">
+            <div class="letter front">K</div>
+            <div class="letter back">K</div>
+            <div class="letter top">Kite</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:11">
+            <div class="letter front">L</div>
+            <div class="letter back">L</div>
+            <div class="letter top">Lion</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:12">
+            <div class="letter front">M</div>
+            <div class="letter back">M</div>
+            <div class="letter top">Moon</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:13">
+            <div class="letter front">N</div>
+            <div class="letter back">N</div>
+            <div class="letter top">Nest</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:14">
+            <div class="letter front">O</div>
+            <div class="letter back">O</div>
+            <div class="letter top">Owl</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:15">
+            <div class="letter front">P</div>
+            <div class="letter back">P</div>
+            <div class="letter top">Pig</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:16">
+            <div class="letter front">Q</div>
+            <div class="letter back">Q</div>
+            <div class="letter top">Queen</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:17">
+            <div class="letter front">R</div>
+            <div class="letter back">R</div>
+            <div class="letter top">Rain</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:18">
+            <div class="letter front">S</div>
+            <div class="letter back">S</div>
+            <div class="letter top">Sun</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:19">
+            <div class="letter front">T</div>
+            <div class="letter back">T</div>
+            <div class="letter top">Tree</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:20">
+            <div class="letter front">U</div>
+            <div class="letter back">U</div>
+            <div class="letter top">Umbrella</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:21">
+            <div class="letter front">V</div>
+            <div class="letter back">V</div>
+            <div class="letter top">Van</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:22">
+            <div class="letter front">W</div>
+            <div class="letter back">W</div>
+            <div class="letter top">Web</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:23">
+            <div class="letter front">X</div>
+            <div class="letter back">X</div>
+            <div class="letter top">Xylophone</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:24">
+            <div class="letter front">Y</div>
+            <div class="letter back">Y</div>
+            <div class="letter top">Yak</div>
+            <div class="mirror"></div>
+        </div>
+        <div class="letter-box" style="--i:25">
+            <div class="letter front">Z</div>
+            <div class="letter back">Z</div>
+            <div class="letter top">Zebra</div>
+            <div class="mirror"></div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.letter-box').forEach((box, index) => {
+            // Click animation
+            box.addEventListener('click', () => {
+                box.style.transform = `rotateY(${180 + Math.random() * 180}deg) rotateX(${Math.random() * 60}deg) scale(1.2)`;
+                setTimeout(() => {
+                    box.style.transform = '';
+                }, 1000);
+            });
+            
+            // Hover effect for desktop
+            if (window.innerWidth > 768) {
+                box.addEventListener('mouseenter', () => {
+                    box.style.transform = 'rotateY(15deg) rotateX(10deg) scale(1.05)';
+                });
+                box.addEventListener('mouseleave', () => {
+                    box.style.transform = '';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
