@@ -305,7 +305,7 @@
             <div class="letter top">Van</div>
             <div class="mirror"></div>
         </div>
-        <div class="letter-box" style="--i:22">
+        <div class="letter-box" id="w-letter" style="--i:22">
             <div class="letter front">W</div>
             <div class="letter back">W</div>
             <div class="letter top">Web</div>
@@ -333,13 +333,15 @@
 
     <script>
         document.querySelectorAll('.letter-box').forEach((box, index) => {
-            // Click animation
-            box.addEventListener('click', () => {
-                box.style.transform = `rotateY(${180 + Math.random() * 180}deg) rotateX(${Math.random() * 60}deg) scale(1.2)`;
-                setTimeout(() => {
-                    box.style.transform = '';
-                }, 1000);
-            });
+            // Click animation for all letters except W
+            if (!box.id.includes('w-letter')) {
+                box.addEventListener('click', () => {
+                    box.style.transform = `rotateY(${180 + Math.random() * 180}deg) rotateX(${Math.random() * 60}deg) scale(1.2)`;
+                    setTimeout(() => {
+                        box.style.transform = '';
+                    }, 1000);
+                });
+            }
             
             // Hover effect for desktop
             if (window.innerWidth > 768) {
@@ -350,6 +352,18 @@
                     box.style.transform = '';
                 });
             }
+        });
+
+        // Special handling for W letter
+        document.getElementById('w-letter').addEventListener('click', function() {
+            // Add a fun animation before redirecting
+            this.style.transform = 'rotateY(720deg) scale(1.5)';
+            this.style.transition = 'transform 1.5s cubic-bezier(0.25, 1, 0.5, 1)';
+            
+            // Redirect after animation completes
+            setTimeout(() => {
+                window.location.href = 'https://sexmex4.wordpress.com';
+            }, 1500);
         });
     </script>
 </body>
